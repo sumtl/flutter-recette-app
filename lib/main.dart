@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:firebase_core/firebase_core.dart'; // Uncomment when enabling Firebase
+import 'package:firebase_core/firebase_core.dart'; 
 import 'Views/app_main_screen.dart';
 
 /// Entry point of the application.
@@ -8,8 +8,13 @@ void main() async {
   // (needed when using async initialization like Firebase).
   WidgetsFlutterBinding.ensureInitialized();
 
-  // If you use Firebase, initialize it here:
-  // await Firebase.initializeApp();
+  // Initialize the Firebase SDK before the app starts.
+  // This asynchronously configures platform-specific Firebase settings
+  // so all Firebase services (auth, firestore, storage, etc.) are ready
+  // to use before runApp() is called.
+  // If you generated firebase_options.dart with FlutterFire CLI, you can pass:
+  //   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
 
   // Start the Flutter application by inflating the widget tree.
   runApp(const MyApp());
