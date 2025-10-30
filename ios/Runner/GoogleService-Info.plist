@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDsjCclr7_yiyVqLFql4zOJtZhgqdRbV7A</string>
+	<string>AIzaSyBIxsVbuP1qewY6ceCBLhvS3q0ADlG0D7s</string>
 	<key>GCM_SENDER_ID</key>
-	<string>362284469535</string>
+	<string>812750370405</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.projetrecette</string>
 	<key>PROJECT_ID</key>
-	<string>project-recette-new</string>
+	<string>flutter-recette-oct-2025</string>
 	<key>STORAGE_BUCKET</key>
-	<string>project-recette-new.firebasestorage.app</string>
+	<string>flutter-recette-oct-2025.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:362284469535:ios:48d18fadfb15848130b42a</string>
+	<string>1:812750370405:ios:d164d5c137d71ce27db88c</string>
 </dict>
 </plist>

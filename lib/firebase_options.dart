@@ -41,48 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCfhw3iDFe0n-54hE_yoexpbx9HTGwqpak',
-    appId: '1:362284469535:web:0830f72d8c96544b30b42a',
-    messagingSenderId: '362284469535',
-    projectId: 'project-recette-new',
-    authDomain: 'project-recette-new.firebaseapp.com',
-    storageBucket: 'project-recette-new.firebasestorage.app',
-    measurementId: 'G-3P8RQVQ6N9',
+    apiKey: 'AIzaSyAvEVbZaQXN9JyvT6mg_eBiUQLE8FkreyU',
+    appId: '1:812750370405:web:2cf471bc789784eb7db88c',
+    messagingSenderId: '812750370405',
+    projectId: 'flutter-recette-oct-2025',
+    authDomain: 'flutter-recette-oct-2025.firebaseapp.com',
+    storageBucket: 'flutter-recette-oct-2025.firebasestorage.app',
+    measurementId: 'G-D5VSZVX7ZR',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCM1on8EapWXOQ2XYpy7Ky5QbMccm8JnmI',
-    appId: '1:362284469535:android:c5a545a0b8ffee9f30b42a',
-    messagingSenderId: '362284469535',
-    projectId: 'project-recette-new',
-    storageBucket: 'project-recette-new.firebasestorage.app',
+    apiKey: 'AIzaSyDuTUUTopNx8-h6jWNMYxfXM9sRgv4Eu78',
+    appId: '1:812750370405:android:dbce4e52c69e7d2f7db88c',
+    messagingSenderId: '812750370405',
+    projectId: 'flutter-recette-oct-2025',
+    storageBucket: 'flutter-recette-oct-2025.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDsjCclr7_yiyVqLFql4zOJtZhgqdRbV7A',
-    appId: '1:362284469535:ios:48d18fadfb15848130b42a',
-    messagingSenderId: '362284469535',
-    projectId: 'project-recette-new',
-    storageBucket: 'project-recette-new.firebasestorage.app',
+    apiKey: 'AIzaSyBIxsVbuP1qewY6ceCBLhvS3q0ADlG0D7s',
+    appId: '1:812750370405:ios:d164d5c137d71ce27db88c',
+    messagingSenderId: '812750370405',
+    projectId: 'flutter-recette-oct-2025',
+    storageBucket: 'flutter-recette-oct-2025.firebasestorage.app',
     iosBundleId: 'com.example.projetrecette',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDsjCclr7_yiyVqLFql4zOJtZhgqdRbV7A',
-    appId: '1:362284469535:ios:48d18fadfb15848130b42a',
-    messagingSenderId: '362284469535',
-    projectId: 'project-recette-new',
-    storageBucket: 'project-recette-new.firebasestorage.app',
+    apiKey: 'AIzaSyBIxsVbuP1qewY6ceCBLhvS3q0ADlG0D7s',
+    appId: '1:812750370405:ios:d164d5c137d71ce27db88c',
+    messagingSenderId: '812750370405',
+    projectId: 'flutter-recette-oct-2025',
+    storageBucket: 'flutter-recette-oct-2025.firebasestorage.app',
     iosBundleId: 'com.example.projetrecette',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCfhw3iDFe0n-54hE_yoexpbx9HTGwqpak',
-    appId: '1:362284469535:web:e3ea91e22db1101830b42a',
-    messagingSenderId: '362284469535',
-    projectId: 'project-recette-new',
-    authDomain: 'project-recette-new.firebaseapp.com',
-    storageBucket: 'project-recette-new.firebasestorage.app',
-    measurementId: 'G-CB8XD0X96S',
+    apiKey: 'AIzaSyAvEVbZaQXN9JyvT6mg_eBiUQLE8FkreyU',
+    appId: '1:812750370405:web:6e589751bae9c35c7db88c',
+    messagingSenderId: '812750370405',
+    projectId: 'flutter-recette-oct-2025',
+    authDomain: 'flutter-recette-oct-2025.firebaseapp.com',
+    storageBucket: 'flutter-recette-oct-2025.firebasestorage.app',
+    measurementId: 'G-SQ3DLL235V',
   );
+
 }

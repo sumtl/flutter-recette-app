@@ -9,36 +9,36 @@
     "platforms": {
       "android": {
         "default": {
-          "projectId": "project-recette-new",
-          "appId": "1:362284469535:android:c5a545a0b8ffee9f30b42a",
+          "projectId": "flutter-recette-oct-2025",
+          "appId": "1:812750370405:android:dbce4e52c69e7d2f7db88c",
           "fileOutput": "android/app/google-services.json"
         }
       },
       "ios": {
         "default": {
-          "projectId": "project-recette-new",
-          "appId": "1:362284469535:ios:48d18fadfb15848130b42a",
+          "projectId": "flutter-recette-oct-2025",
+          "appId": "1:812750370405:ios:d164d5c137d71ce27db88c",
           "uploadDebugSymbols": false,
           "fileOutput": "ios/Runner/GoogleService-Info.plist"
         }
       },
       "macos": {
         "default": {
-          "projectId": "project-recette-new",
-          "appId": "1:362284469535:ios:48d18fadfb15848130b42a",
+          "projectId": "flutter-recette-oct-2025",
+          "appId": "1:812750370405:ios:d164d5c137d71ce27db88c",
           "uploadDebugSymbols": false,
           "fileOutput": "macos/Runner/GoogleService-Info.plist"
         }
       },
       "dart": {
         "lib/firebase_options.dart": {
-          "projectId": "project-recette-new",
+          "projectId": "flutter-recette-oct-2025",
           "configurations": {
-            "android": "1:362284469535:android:c5a545a0b8ffee9f30b42a",
-            "ios": "1:362284469535:ios:48d18fadfb15848130b42a",
-            "macos": "1:362284469535:ios:48d18fadfb15848130b42a",
-            "web": "1:362284469535:web:0830f72d8c96544b30b42a",
-            "windows": "1:362284469535:web:e3ea91e22db1101830b42a"
+            "android": "1:812750370405:android:dbce4e52c69e7d2f7db88c",
+            "ios": "1:812750370405:ios:d164d5c137d71ce27db88c",
+            "macos": "1:812750370405:ios:d164d5c137d71ce27db88c",
+            "web": "1:812750370405:web:2cf471bc789784eb7db88c",
+            "windows": "1:812750370405:web:6e589751bae9c35c7db88c"
           }
         }
       }
