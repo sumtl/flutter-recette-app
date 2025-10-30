@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart'; 
 import 'Views/app_main_screen.dart';
+import 'firebase_options.dart';// Import generated Firebase options
 
 /// Entry point of the application.
 void main() async {
@@ -14,7 +15,9 @@ void main() async {
   // to use before runApp() is called.
   // If you generated firebase_options.dart with FlutterFire CLI, you can pass:
   //   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // Start the Flutter application by inflating the widget tree.
   runApp(const MyApp());
