@@ -132,6 +132,8 @@ class _MyAppHomeScreenState extends State<MyAppHomeScreen> {
                     ), // TextStyle
                   ), // Text
                 ), // Padding
+                // Categories buttons
+                categoryButtons(),
               ],
             ),
           ),
@@ -201,8 +203,62 @@ class _MyAppHomeScreenState extends State<MyAppHomeScreen> {
       ),
     );
   }
+  // Helper method to build a horizontal row of category filter buttons
+  // Each button represents a category and can be tapped to select it
+  Widget categoryButtons() {
+    return Row(
+      // horizontal layout for the buttons
+      children: categories.map((category) {
+        // map each category string to a button widget
+        bool isSelected =
+            selectedCategory ==
+            category; // check if this category is currently selected
+        return Padding(
+          // add right margin between buttons
+          padding: const EdgeInsets.only(right: 12),
+          child: GestureDetector(
+            // make the container tappable
+            onTap: () {
+              // handle tap to select this category
+              setState(() {
+                // trigger UI rebuild to reflect selection change
+                selectedCategory = category; // update the selected category
+              });
+            },
+            child: Container(
+              // styled button container
+              padding: EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 12,
+              ), // internal padding for text
+              decoration: BoxDecoration(
+                // visual styling for the button
+                color: isSelected
+                    ? kprimaryColor
+                    : Colors.grey[200], // highlight if selected
+                borderRadius: BorderRadius.circular(25), // rounded pill shape
+              ),
+              child: Text(
+                // category label text
+                category, // display the category name
+                style: TextStyle(
+                  // text styling
+                  color: isSelected
+                      ? Colors.white
+                      : Colors.grey[600], // contrast color based on selection
+                  fontWeight: FontWeight.w600, // semi-bold weight
+                  fontSize: 14, // readable font size
+                ),
+              ),
+            ),
+          ),
+        );
+      }).toList(), // convert the mapped widgets to a list
+    );
+  }
 }
-
+ 
+  
 // Small promotional banner widget shown in the Home page
 class BannerToExplore extends StatelessWidget {
   const BannerToExplore({Key? key}) : super(key: key);
