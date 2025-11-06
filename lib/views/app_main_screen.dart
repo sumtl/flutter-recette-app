@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../constants.dart';
+import 'view_all_items.dart';
 
 /// Main screen of the app that shows a BottomNavigationBar and a body.
 ///
@@ -93,51 +95,267 @@ class _MyAppHomeScreenState extends State<MyAppHomeScreen> {
   // currently selected category shown on the Home page; defaults to "All"
   String selectedCategory = "All"; // holds the selected category name
   // list of available category labels used to render category UI later
-  List<String> categories = ["All", "Dinner", "Lunch", "Breakfast"];
+  // List<String> categories = ["All", "Dinner", "Lunch", "Breakfast"];
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
-    // SafeArea avoids intrusions by system UI (status bar / notches)
+    // SafeArea prevents content from being placed under status bar / notches.
     return SafeArea(
-      child: Column(
-        // align children to the left edge of the column
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // outer padding to add horizontal spacing on both sides
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              children: [
-                // header row (title + notification button)
-                headerParts(),
-                // spacing between header and search
-                SizedBox(height: 20),
-                // search input widget (rounded TextField)
-                mySearchBar(),
-                // spacing between search and banner
-                SizedBox(height: 20),
-                // banner widget that promotes exploring recipes
-                const BannerToExplore(),
-                // section label for categories with vertical padding
-                const Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 20,
-                  ), // EdgeInsets.symmetric
-                  child: Text(
-                    // visible section title string
+      child: Padding(
+        // Horizontal padding for the whole page content.
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          // Align children to the left inside the column.
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header row with title and notification icon.
+            headerParts(), // note: this is a method returning a Widget (not a const).
+            // Space between header and search bar.
+            const SizedBox(height: 20),
+
+            // Search bar widget (method returns a Widget).
+            mySearchBar(),
+
+            // Space between search and banner.
+            const SizedBox(height: 20),
+
+            // Promotional banner encouraging user to explore recipes.
+            const BannerToExplore(),
+
+            // Section title for categories with vertical padding.
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 20,
+              ), // EdgeInsets.symmetric
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,// space between title and possible action
+                children: [
+                  Text(
                     "Categories",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ), // TextStyle
                   ), // Text
-                ), // Padding
-                // Categories buttons
-                categoryButtons(),
+                ],
+              ),
+            ),
+
+            // Categories row: read category documents from Firestore and render.
+            // We use a StreamBuilder to receive realtime updates.
+            StreamBuilder<QuerySnapshot>(
+              stream: _firestore.collection('categories').snapshots(),
+              builder: (context, snapshot) {
+                // While waiting for first data, show a small loading area with fixed height
+                // so layout doesn't jump when data arrives.
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox(
+                    height: 40,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+
+                // Build a categories list starting with the "All" pseudo-category.
+                final categories = <String>['All'];
+
+                // If snapshot has data, extract each document's 'name' field.
+                if (snapshot.hasData) {
+                  for (final d in snapshot.data!.docs) {
+                    // Convert to string and skip empty names.
+                    final name = (d['name'] ?? '').toString();
+                    if (name.isNotEmpty) categories.add(name);
+                  }
+                }
+
+                // Render the horizontal category buttons.
+                return categoryButtons(categories);
+              },
+            ),
+
+            // Vertical spacing between categories and grid.
+            const SizedBox(height: 20),
+
+            // Popular Recipes section
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Popular Recipes",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ViewAllItems(categoryTitle: "Popular Recipes"),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    "View All",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: kprimaryColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
+            const SizedBox(height: 15),
+
+            // Grid of recipes — Expanded makes it fill the remaining vertical space.
+            // Important: Scaffold provides bounded height so using Expanded is valid.
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                // Choose which query to run based on the selected category.
+                // Limit to 4 recipes if "All" category is selected.
+                stream: selectedCategory == "All"
+                    ? _firestore.collection('details').limit(4).snapshots()
+                    : _firestore
+                          .collection('details')
+                          .where('category', isEqualTo: selectedCategory)
+                          .snapshots(),
+                builder: (context, snapshot) {
+                  // Loading state while query initializes.
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  // No-data state: show friendly message.
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text("No recipes found"));
+                  }
+
+                  // Data available: render a scrollable GridView.
+                  // GridView scrolls independently inside the Expanded area.
+                  return GridView.builder(
+                    // Small padding at the bottom to avoid touching screen edge.
+                    padding: const EdgeInsets.only(bottom: 8, top: 4),
+                    // Grid layout configuration: 2 columns with spacing.
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, // two columns
+                          crossAxisSpacing: 10, // horizontal gap between tiles
+                          mainAxisSpacing: 10, // vertical gap between tiles
+                          childAspectRatio: 0.8, // tile height/width ratio
+                        ),
+                    itemCount: snapshot.data!.docs.length, // number of recipes
+                    itemBuilder: (context, index) {
+                      // Grab a single recipe document.
+                      final recipe = snapshot.data!.docs[index];
+
+                      // Safely read fields and convert to String.
+                      final img = (recipe['image'] ?? '').toString();
+                      final name = (recipe['name'] ?? '').toString();
+                      final time = (recipe['time'] ?? '').toString();
+                      final cal = (recipe['cal'] ?? '0').toString();
+
+                      // Card-like container for a recipe tile.
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Image area: Expanded so image takes remaining vertical
+                            // space inside the tile before the text section.
+                            Expanded(
+                              child: ClipRRect(
+                                // Only top corners are rounded for the image.
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(15),
+                                ),
+                                child: img.isNotEmpty
+                                    // If an image URL exists, load from network.
+                                    // Note: on web this URL must allow CORS or use an asset/CDN that allows cross-origin requests.
+                                    ? Image.network(img, fit: BoxFit.cover)
+                                    // Fallback placeholder when there's no image URL.
+                                    : Container(
+                                        color: Colors.grey[200],
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.image_not_supported,
+                                          ),
+                                        ),
+                                      ),
+                              ),
+                            ),
+
+                            // Textual information area with padding.
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Recipe title (bold).
+                                  Text(
+                                    name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  // Short description (muted color).
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Iconsax.clock,
+                                        size: 14,
+                                        color: Colors.grey[600],
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        time.isNotEmpty ? "$time Min" : "- Min",
+                                        style: TextStyle(
+                                          color: Colors.grey[600],
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Icon(
+                                        Iconsax.flash_1,
+                                        size: 14,
+                                        color: Colors.grey[600],
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        "$cal Cal",
+                                        style: TextStyle(
+                                          color: Colors.grey[600],
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ), // end Expanded
+          ],
+        ),
       ),
     );
   }
@@ -203,9 +421,10 @@ class _MyAppHomeScreenState extends State<MyAppHomeScreen> {
       ),
     );
   }
+
   // Helper method to build a horizontal row of category filter buttons
   // Each button represents a category and can be tapped to select it
-  Widget categoryButtons() {
+  Widget categoryButtons(List<String> categories) {
     return Row(
       // horizontal layout for the buttons
       children: categories.map((category) {
@@ -257,8 +476,7 @@ class _MyAppHomeScreenState extends State<MyAppHomeScreen> {
     );
   }
 }
- 
-  
+
 // Small promotional banner widget shown in the Home page
 class BannerToExplore extends StatelessWidget {
   const BannerToExplore({Key? key}) : super(key: key);
